@@ -9,14 +9,13 @@ on:
 jobs:
   security-audit:
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
+      # FIX: Upgraded checkout, setup-python, and upload-artifact to latest versions to clear Node warnings natively
       - name: Checkout Code
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.2
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v5.4.0
         with:
           python-version: '3.10'
 
@@ -35,7 +34,7 @@ jobs:
 
       # Archive the built SBOM artifact
       - name: Upload SBOM Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.1
         with:
           name: python-iot-sbom
           path: bom.json

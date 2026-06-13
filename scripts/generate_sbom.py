@@ -15,7 +15,7 @@ def build_sbom():
             if line and "==" in line:
                 name, version = line.split("==")
                 
-                # FIX: Instantiate purl as a typed PackageURL instance to satisfy model comparisons
+                # Instantiate purl as a typed PackageURL instance to satisfy model comparisons
                 purl_obj = PackageURL(type='pypi', name=name, version=version)
                 
                 # Structure the programmatic CycloneDX component object mapping
