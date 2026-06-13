@@ -1,4 +1,5 @@
 import json
+from packageurl import PackageURL
 from cyclonedx.model.bom import Bom
 from cyclonedx.model.component import Component, ComponentType
 from cyclonedx.output.json import JsonV1Dot4
@@ -13,12 +14,16 @@ def build_sbom():
             line = line.strip()
             if line and "==" in line:
                 name, version = line.split("==")
+                
+                # FIX: Instantiate purl as a typed PackageURL instance to satisfy model comparisons
+                purl_obj = PackageURL(type='pypi', name=name, version=version)
+                
                 # Structure the programmatic CycloneDX component object mapping
                 comp = Component(
                     name=name,
                     version=version,
                     type=ComponentType.LIBRARY,
-                    purl=f"pkg:pypi/{name}@{version}"
+                    purl=purl_obj
                 )
                 bom.components.add(comp)
                 

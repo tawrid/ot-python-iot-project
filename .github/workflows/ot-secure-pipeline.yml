@@ -30,7 +30,7 @@ jobs:
       # Open-Source SBOM Generation using a pure internal Python runtime execution block
       - name: Generate CycloneDX SBOM via Native Python Engine
         run: |
-          pip install --no-cache-dir --quiet cyclonedx-python-lib
+          pip install --no-cache-dir --quiet cyclonedx-python-lib packageurl-python
           python scripts/generate_sbom.py
 
       # Archive the built SBOM artifact
