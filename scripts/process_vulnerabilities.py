@@ -5,7 +5,6 @@ import datetime
 
 def run_trivy_scan():
     print("Running automated software composition analysis via Trivy...")
-    # Uses exit code 0 explicitly to allow downstream execution 
     cmd = ["trivy", "fs", "--format", "json", "--exit-code", "0", "--output", "trivy_report.json", "."]
     subprocess.run(cmd, check=True)
 
@@ -19,7 +18,6 @@ def evaluate_vulnerabilities():
         data = json.load(f)
 
     extracted_cves = []
-    # Parse Trivy JSON nodes to find vulnerabilities
     results = data.get("Results", [])
     for result in results:
         vulnerabilities = result.get("Vulnerabilities", [])
@@ -33,7 +31,6 @@ def evaluate_vulnerabilities():
                 "Description": vuln.get("Title", "No title available")
             })
 
-    # If security vulnerabilities are discovered, output a timestamped file
     if extracted_cves:
         current_date = datetime.datetime.now().strftime("%Y-%m-%d")
         output_filename = f"vulns/cve-alert-{current_date}.json"
@@ -43,7 +40,6 @@ def evaluate_vulnerabilities():
             json.dump({"date": current_date, "vulnerabilities": extracted_cves}, out_file, indent=4)
         
         print(f"Alert: Critical vulnerabilities found. Recorded in {output_filename}")
-        # Set a GitHub action environment variable to notify the workflow to commit the file
         with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
             print("VULNS_FOUND=true", file=fh)
     else:
