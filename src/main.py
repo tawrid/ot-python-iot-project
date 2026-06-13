@@ -1,7 +1,6 @@
 import time
 import logging
 
-# FIX: Corrected level configuration syntax to use logging.INFO module mapping explicitly
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def main():
