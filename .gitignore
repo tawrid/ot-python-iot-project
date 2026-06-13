@@ -30,3 +30,5 @@ bandit-results.txt
 bom.json
 __pycache__/
 *.pyc
+
+push.sh
