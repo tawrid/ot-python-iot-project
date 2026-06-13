@@ -10,7 +10,6 @@ jobs:
   security-audit:
     runs-on: ubuntu-latest
     steps:
-      # FIX: Upgraded checkout, setup-python, and upload-artifact to latest versions to clear Node warnings natively
       - name: Checkout Code
         uses: actions/checkout@v4.2.2
 
@@ -38,3 +37,20 @@ jobs:
         with:
           name: python-iot-sbom
           path: bom.json
+
+      # Build and securely verify the container image artifact simulation environment
+      - name: Build Local Simulation Image Artifact
+        run: |
+          docker build -t ot-edge-gateway:latest .
+
+      # Deploys safe, SHA-pinned version of setup-trivy to scan container layer images
+      - name: Deploy Aquasecurity Trivy Node
+        uses: aquasecurity/setup-trivy@e07451d2e059ed86c2870430ea286b3a9e0bf241
+        with:
+          cache: true
+          version: v0.69.3
+
+      # Scan the finalized image container for embedded kernel bugs before release
+      - name: Evaluate Container Vulnerabilities
+        run: |
+          trivy image --exit-code 0 --format table ot-edge-gateway:latest
