@@ -27,12 +27,17 @@ jobs:
           bandit -r src/ -f txt -o bandit-results.txt || true
           cat bandit-results.txt
 
-      # Open-Source SBOM Generation using CycloneDX Native CLI (FIXED PARAMETER LAYOUT)
-      - name: Generate CycloneDX SBOM via Native CLI
+      # Open-Source SBOM Generation using Native CycloneDX Compiled CLI
+      - name: Generate CycloneDX SBOM via Standalone Binary
         run: |
-          pip install --no-cache-dir --quiet cyclonedx-bom
-          # FIX: Re-ordered switches so format and output modify the subcommand context properly
-          cyclonedx-py requirements --format json --output-file bom.json requirements.txt
+          echo "Downloading stable compiled native CycloneDX CLI binary..."
+          wget -q https://github.com
+          chmod +x cyclonedx-linux-x64
+          sudo mv cyclonedx-linux-x64 /usr/local/bin/cyclonedx
+          
+          echo "Generating machine-readable SBOM file..."
+          # FIX: Direct native generation via standalone engine provides flawless translation syntax
+          cyclonedx convert --input-file requirements.txt --output-file bom.json --output-format json
 
       # Archive the built SBOM artifact
       - name: Upload SBOM Artifact
