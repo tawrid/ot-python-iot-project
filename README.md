@@ -6,7 +6,22 @@ An open-source reference implementation of a **Secure Development Lifecycle (SDL
 
 ## 🏗️ Architecture Overview
 
-[ Code Repository ] ──> [ Static Analysis (SAST) ] ──> [ Programmatic CycloneDX SBOM ]│[ Hardened Docker Runtime ] <── [ Image Vulnerability Scan ] <───┘
+```mermaid
+graph LR
+    A[Code Repository] --> B[Static Analysis SAST]
+    B --> C[Programmatic CycloneDX SBOM]
+    C --> D[Image Vulnerability Scan]
+    D --> E[Hardened Docker Runtime]
+
+    style A fill:#23272e,stroke:#3b4252,stroke-width:2px;
+    style B fill:#23272e,stroke:#81a1c1,stroke-width:2px;
+    style C fill:#23272e,stroke:#a3be8c,stroke-width:2px;
+    style D fill:#23272e,stroke:#ebcb8b,stroke-width:2px;
+    style E fill:#23272e,stroke:#bf616a,stroke-width:2px;
+```
+
+
+
 The pipeline acts as an automated governance engine that ensures no unvetted dependencies or configuration flaws hit the factory floor.
 
 ### Core Security Components Included:
