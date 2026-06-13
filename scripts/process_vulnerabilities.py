@@ -5,8 +5,8 @@ import datetime
 
 def run_trivy_scan():
     print("Running automated software composition analysis via Trivy...")
-    # Scan the requirements file and output results as JSON
-    cmd = ["trivy", "fs", "--format", "json", "--output", "trivy_report.json", "."]
+    # FIX: Added --exit-code 0 so Trivy does not crash the Python process when vulnerabilities are found
+    cmd = ["trivy", "fs", "--format", "json", "--exit-code", "0", "--output", "trivy_report.json", "."]
     subprocess.run(cmd, check=True)
 
 def evaluate_vulnerabilities():

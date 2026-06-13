@@ -19,14 +19,14 @@ jobs:
           python-version: '3.10'
 
       # SAST Tool: Bandit checks for insecure Python code patterns
-      - name: Run Bandit (Python SAST)
+      run-bandit:
         run: |
           pip install bandit
           bandit -r src/ -f txt -o bandit-results.txt || true
           cat bandit-results.txt
 
       # Open-Source SBOM Generation using CycloneDX
-      - name: Generate CycloneDX SBOM
+      generate-sbom:
         uses: CycloneDX/gh-python-sbom@v2
         with:
           input: 'requirements.txt'
@@ -34,7 +34,7 @@ jobs:
           format: 'json'
 
       # Archive the built SBOM artifact
-      - name: Upload SBOM Artifact
+      upload-sbom:
         uses: actions/upload-artifact@v4
         with:
           name: python-iot-sbom
