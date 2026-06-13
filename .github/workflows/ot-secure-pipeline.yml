@@ -12,8 +12,9 @@ jobs:
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
+      # FIX: Upgraded to checkout@v4.1.7 to perfectly support the forced Node 24 runner environment
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.1.7
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -27,13 +28,11 @@ jobs:
           bandit -r src/ -f txt -o bandit-results.txt || true
           cat bandit-results.txt
 
-      # Open-Source SBOM Generation using CycloneDX
-      - name: Generate CycloneDX SBOM
-        uses: CycloneDX/gh-python-sbom@v2
-        with:
-          input: 'requirements.txt'
-          output: 'bom.json'
-          format: 'json'
+      # Open-Source SBOM Generation using CycloneDX Native CLI
+      - name: Generate CycloneDX SBOM via Native CLI
+        run: |
+          pip install cyclonedx-bom
+          cyclonedx-py requirements requirements.txt --format json --output bom.json
 
       # Archive the built SBOM artifact
       - name: Upload SBOM Artifact
