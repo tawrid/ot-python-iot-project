@@ -9,6 +9,8 @@ on:
 jobs:
   security-audit:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -19,14 +21,14 @@ jobs:
           python-version: '3.10'
 
       # SAST Tool: Bandit checks for insecure Python code patterns
-      run-bandit:
+      - name: Run Bandit (Python SAST)
         run: |
           pip install bandit
           bandit -r src/ -f txt -o bandit-results.txt || true
           cat bandit-results.txt
 
       # Open-Source SBOM Generation using CycloneDX
-      generate-sbom:
+      - name: Generate CycloneDX SBOM
         uses: CycloneDX/gh-python-sbom@v2
         with:
           input: 'requirements.txt'
@@ -34,7 +36,7 @@ jobs:
           format: 'json'
 
       # Archive the built SBOM artifact
-      upload-sbom:
+      - name: Upload SBOM Artifact
         uses: actions/upload-artifact@v4
         with:
           name: python-iot-sbom

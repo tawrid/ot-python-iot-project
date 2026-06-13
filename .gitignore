@@ -22,3 +22,11 @@ bandit-results.txt
 bom.json
 __pycache__/
 *.pyc
+
+# OT Pipeline Custom Configurations
+build_pipeline.sh
+trivy_report.json
+bandit-results.txt
+bom.json
+__pycache__/
+*.pyc
